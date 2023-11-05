@@ -324,7 +324,12 @@ fn write_bin(args: WriteBinArgs, config: &Config) -> Result<()> {
     let mut buffer = Vec::with_capacity(size.try_into().into_diagnostic()?);
     f.read_to_end(&mut buffer).into_diagnostic()?;
 
-    flasher.write_bin_to_flash(args.addr, &buffer, Some(&mut EspflashProgress::default()))?;
+    flasher.write_bin_to_flash(
+        args.addr,
+        &buffer,
+        Some(&mut EspflashProgress::default()),
+        true,
+    )?;
 
     Ok(())
 }

@@ -826,6 +826,7 @@ impl Flasher {
         addr: u32,
         data: &[u8],
         mut progress: Option<&mut dyn ProgressCallbacks>,
+        reboot_when_finished: bool,
     ) -> Result<(), Error> {
         let segment = RomSegment {
             addr,
@@ -835,7 +836,9 @@ impl Flasher {
         let mut target = self.chip.flash_target(self.spi_params, self.use_stub);
         target.begin(&mut self.connection).flashing()?;
         target.write_segment(&mut self.connection, segment, &mut progress)?;
-        target.finish(&mut self.connection, true).flashing()?;
+        target
+            .finish(&mut self.connection, reboot_when_finished)
+            .flashing()?;
 
         Ok(())
     }
